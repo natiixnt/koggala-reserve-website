@@ -4,7 +4,4 @@
   <rect width="1600" height="700" fill="#9fc5b5" />
   <path d="M0 520 C220 430, 420 560, 620 470 C820 390, 980 540, 1200 470 C1380 410, 1500 500, 1600 460 L1600 700 L0 700 Z" fill="#3f6f5f" />
   <path d="M0 560 C260 520, 420 620, 720 570 C980 530, 1240 620, 1600 560 L1600 700 L0 700 Z" fill="#2e584b" opacity="0.75" />
-  <text x="50%" y="35%" text-anchor="middle" font-size="40" fill="#ffffff" font-family="Arial, sans-serif" opacity="0.8">
-    MID MANGROVES
-  </text>
 </svg>

@@ -144,7 +144,10 @@ strong {
   z-index: 0;
   pointer-events: none;
   overflow: hidden;
-  background: radial-gradient(circle at 20% 10%, rgba(255, 255, 255, 0.35), transparent 55%);
+  background: radial-gradient(circle at 20% 10%, rgba(255, 255, 255, 0.25), transparent 55%),
+    linear-gradient(180deg, rgba(12, 60, 58, 0.22), rgba(12, 60, 58, 0.06));
+  --env-water: 0;
+  --env-land: 1;
 }
 
 .env-layers {
@@ -368,6 +371,20 @@ strong {
   will-change: transform;
 }
 
+.env-layer {
+  opacity: 1;
+}
+
+.env-layer.env-water {
+  opacity: var(--env-water);
+  top: 0;
+  height: 100%;
+}
+
+.env-layer.env-land {
+  opacity: var(--env-land);
+}
+
 .layer-sky {
   top: -8%;
   height: 60%;
@@ -386,6 +403,11 @@ strong {
 .layer-near {
   bottom: -4%;
   height: 55%;
+}
+
+#env .env-layer.env-water.layer-sky {
+  top: 0;
+  height: 100%;
 }
 
 .water-shimmer {

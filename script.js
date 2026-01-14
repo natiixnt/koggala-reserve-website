@@ -17,6 +17,8 @@ const TUNING = {
   env: {
     lerp: 0.07, // smoothing for global environment parallax
     lerpReduced: 0.18,
+    blendLerp: 0.08, // crossfade speed between water/land
+    blendReduced: 0.18,
   },
   story: {
     lerp: 0.08, // story parallax smoothing
@@ -95,9 +97,6 @@ const updateEnvTarget = (scrollY) => {
 };
 
 const updateEnv = (motionScale) => {
-  if (!envLayers.length) {
-    return;
-  }
   const lerpFactor = reduceMotion ? TUNING.env.lerpReduced : TUNING.env.lerp;
   envState.smooth = lerp(envState.smooth, envState.target, lerpFactor);
   const shift = TUNING.story.maxShift * motionScale;
@@ -107,12 +106,19 @@ const updateEnv = (motionScale) => {
     const offset = envState.smooth * shift * depth;
     layer.style.transform = `translate3d(-50%, ${offset}px, 0)`;
   });
+
+  const blendLerp = reduceMotion ? TUNING.env.blendReduced : TUNING.env.blendLerp;
+  envState.blend = lerp(envState.blend, envState.targetBlend, blendLerp);
+  if (env) {
+    env.style.setProperty('--env-water', envState.blend.toFixed(3));
+    env.style.setProperty('--env-land', (1 - envState.blend).toFixed(3));
+  }
 };
 
 const blocks = [];
 let latestScroll = window.scrollY;
 let rafId = null;
-const envState = { target: 0, smooth: 0, maxScroll: 1 };
+const envState = { target: 0, smooth: 0, maxScroll: 1, blend: 0, targetBlend: 0 };
 
 const createStepObserver = (steps, onActive) => {
   if (!steps.length || !('IntersectionObserver' in window)) {
@@ -538,6 +544,27 @@ if (sceneSections.length) {
     sceneSections.forEach((section) => sceneObserver.observe(section));
   } else {
     sceneSections.forEach((section) => section.classList.add('is-inview'));
+  }
+}
+
+const envHideSections = Array.from(document.querySelectorAll('[data-env-hide]'));
+if (env && envHideSections.length) {
+  if ('IntersectionObserver' in window) {
+    const envVisibility = new Map();
+    envHideSections.forEach((section) => envVisibility.set(section, false));
+    const envObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          envVisibility.set(entry.target, entry.isIntersecting);
+        });
+        const shouldHide = [...envVisibility.values()].some(Boolean);
+        envState.targetBlend = shouldHide ? 1 : 0;
+      },
+      { threshold: 0, rootMargin: '-30% 0px -30% 0px' }
+    );
+    envHideSections.forEach((section) => envObserver.observe(section));
+  } else {
+    envState.targetBlend = 0;
   }
 }
 

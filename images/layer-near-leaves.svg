@@ -4,7 +4,4 @@
   <rect width="1600" height="700" fill="#8fb6a6" />
   <path d="M0 560 C180 520, 350 620, 520 560 C720 490, 880 620, 1100 560 C1300 500, 1460 600, 1600 550 L1600 700 L0 700 Z" fill="#244a3f" />
   <path d="M0 600 C240 580, 420 670, 760 610 C1000 570, 1300 670, 1600 620 L1600 700 L0 700 Z" fill="#1c3d33" opacity="0.85" />
-  <text x="50%" y="32%" text-anchor="middle" font-size="40" fill="#ffffff" font-family="Arial, sans-serif" opacity="0.8">
-    FOREGROUND LEAVES
-  </text>
 </svg>
