@@ -3,6 +3,8 @@ const header = document.querySelector('.site-header');
 const navToggle = document.querySelector('.nav-toggle');
 const nav = document.getElementById('site-nav');
 const navLinks = nav ? Array.from(nav.querySelectorAll('a')) : [];
+const env = document.getElementById('env');
+const envLayers = env ? Array.from(env.querySelectorAll('[data-depth]')) : [];
 
 const reduceMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
 let reduceMotion = reduceMotionQuery.matches;
@@ -11,6 +13,10 @@ const TUNING = {
   motionScale: {
     mobile: 0.5, // reduce motion on smaller screens to avoid jitter
     reduced: 0.2, // global reduction for prefers-reduced-motion
+  },
+  env: {
+    lerp: 0.07, // smoothing for global environment parallax
+    lerpReduced: 0.18,
   },
   story: {
     lerp: 0.08, // story parallax smoothing
@@ -42,6 +48,12 @@ const TUNING = {
       driftSpeedY: 3000,
     },
   },
+  gallery: {
+    lerp: 0.12, // crossfade smoothing
+    slide: 24, // px slide during crossfade
+    scaleDelta: 0.02,
+    blur: 8,
+  },
 };
 
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
@@ -71,9 +83,36 @@ const updateHeader = (scrollY) => {
   }
 };
 
+const updateEnvMetrics = () => {
+  envState.maxScroll = Math.max(document.documentElement.scrollHeight - window.innerHeight, 1);
+};
+
+const updateEnvTarget = (scrollY) => {
+  if (!envLayers.length) {
+    return;
+  }
+  envState.target = clamp(scrollY / envState.maxScroll, 0, 1);
+};
+
+const updateEnv = (motionScale) => {
+  if (!envLayers.length) {
+    return;
+  }
+  const lerpFactor = reduceMotion ? TUNING.env.lerpReduced : TUNING.env.lerp;
+  envState.smooth = lerp(envState.smooth, envState.target, lerpFactor);
+  const shift = TUNING.story.maxShift * motionScale;
+
+  envLayers.forEach((layer) => {
+    const depth = Number.parseFloat(layer.dataset.depth) || 0.2;
+    const offset = envState.smooth * shift * depth;
+    layer.style.transform = `translate3d(-50%, ${offset}px, 0)`;
+  });
+};
+
 const blocks = [];
 let latestScroll = window.scrollY;
 let rafId = null;
+const envState = { target: 0, smooth: 0, maxScroll: 1 };
 
 const createStepObserver = (steps, onActive) => {
   if (!steps.length || !('IntersectionObserver' in window)) {
@@ -167,10 +206,10 @@ const createStoryBlock = () => {
   const stage = root.querySelector('.story-stage');
   const steps = Array.from(root.querySelectorAll('.story-step'));
   const cards = Array.from(root.querySelectorAll('.story-card'));
-  const layers = stage ? Array.from(stage.querySelectorAll('[data-depth]')) : [];
   const boat = stage ? stage.querySelector('.story-boat') : null;
   const heroVisual = root.querySelector('[data-hero-visual]');
   const slowStep = steps.find((step) => step.dataset.slow === 'true');
+  const decors = stage ? Array.from(stage.querySelectorAll('[data-decor]')) : [];
 
   const state = {
     boatPos: 0,
@@ -183,18 +222,15 @@ const createStoryBlock = () => {
       card.classList.toggle('is-active', isActive);
       card.setAttribute('aria-hidden', isActive ? 'false' : 'true');
     });
+    decors.forEach((decor) => {
+      const decorIndex = Number.parseInt(decor.dataset.decor, 10);
+      decor.classList.toggle('is-active', decorIndex === index);
+    });
   };
 
   const update = (time, motionScale, block) => {
     const lerpFactor = reduceMotion ? 0.2 : TUNING.story.lerp;
     block.smoothProgress = lerp(block.smoothProgress, block.targetProgress, lerpFactor);
-
-    const shift = TUNING.story.maxShift * motionScale;
-    layers.forEach((layer) => {
-      const depth = Number.parseFloat(layer.dataset.depth) || 0.2;
-      const offset = block.smoothProgress * shift * depth;
-      layer.style.transform = `translate3d(-50%, ${offset}px, 0)`;
-    });
 
     if (heroVisual) {
       const visualProgress = block.smoothProgress;
@@ -247,6 +283,7 @@ const createGalleryBlock = () => {
   const stage = root.querySelector('.gallery-stage');
   const steps = Array.from(root.querySelectorAll('.gallery-step'));
   const frames = Array.from(root.querySelectorAll('.gallery-frame'));
+  let lastVisible = -1;
 
   const onActive = (index) => {
     frames.forEach((frame, frameIndex) => {
@@ -256,24 +293,55 @@ const createGalleryBlock = () => {
     });
   };
 
+  const setVisibleFrame = (index) => {
+    if (index === lastVisible) {
+      return;
+    }
+    lastVisible = index;
+    frames.forEach((frame, frameIndex) => {
+      const isActive = frameIndex === index;
+      frame.classList.toggle('is-active', isActive);
+      frame.setAttribute('aria-hidden', isActive ? 'false' : 'true');
+    });
+  };
+
   const update = (time, motionScale, block) => {
-    const lerpFactor = reduceMotion ? 0.2 : 0.12;
-    block.smoothProgress = lerp(block.smoothProgress, block.targetProgress, lerpFactor);
+    const lerpFactor = reduceMotion ? 0.2 : TUNING.gallery.lerp;
+    const centerY = latestScroll + window.innerHeight * 0.5;
+    const targetProgress = clamp((centerY - block.metrics.top) / block.metrics.maxScroll, 0, 1);
+    block.smoothProgress = lerp(block.smoothProgress, targetProgress, lerpFactor);
     const stepCount = Math.max(steps.length - 1, 1);
-    const stepSize = 1 / stepCount;
-    const active = clamp(block.activeIndex, 0, frames.length - 1);
-    const stepStart = stepSize * active;
-    const stepProgress = clamp((block.smoothProgress - stepStart) / stepSize, 0, 1);
+    const stepFloat = block.smoothProgress * stepCount;
+    const baseIndex = clamp(Math.floor(stepFloat), 0, frames.length - 1);
+    const nextIndex = clamp(baseIndex + 1, 0, frames.length - 1);
+    const t = clamp(stepFloat - baseIndex, 0, 1);
+    const slide = reduceMotion ? 0 : TUNING.gallery.slide * motionScale;
 
     frames.forEach((frame, index) => {
-      if (index !== active) {
-        frame.style.transform = '';
-        return;
+      let opacity = 0;
+      let translateX = 0;
+      let scale = reduceMotion ? 1 : 1 - TUNING.gallery.scaleDelta;
+      let blur = reduceMotion ? 0 : TUNING.gallery.blur;
+
+      if (index === baseIndex) {
+        opacity = 1 - t;
+        translateX = -slide * t;
+        scale = reduceMotion ? 1 : 1 - TUNING.gallery.scaleDelta * t;
+        blur = reduceMotion ? 0 : TUNING.gallery.blur * t;
+      } else if (index === nextIndex) {
+        opacity = t;
+        translateX = slide * (1 - t);
+        scale = reduceMotion ? 1 : 1 - TUNING.gallery.scaleDelta + TUNING.gallery.scaleDelta * t;
+        blur = reduceMotion ? 0 : TUNING.gallery.blur * (1 - t);
       }
-      const scale = reduceMotion ? 1 : 1.05 + 0.07 * stepProgress;
-      const translateY = reduceMotion ? 0 : -30 * stepProgress * motionScale;
-      frame.style.transform = `translate3d(0, ${translateY}px, 0) scale(${scale})`;
+
+      frame.style.opacity = opacity;
+      frame.style.transform = `translate3d(${translateX}px, 0, 0) scale(${scale})`;
+      frame.style.filter = reduceMotion ? 'none' : `blur(${blur}px)`;
     });
+
+    const visibleIndex = t > 0.5 ? nextIndex : baseIndex;
+    setVisibleFrame(visibleIndex);
   };
 
   return createBlock({ root, stage, steps, onActive, update });
@@ -287,9 +355,9 @@ const createJourneyBlock = () => {
   const stage = root.querySelector('.journey-stage');
   const steps = Array.from(root.querySelectorAll('.journey-step'));
   const cards = Array.from(root.querySelectorAll('.journey-card'));
-  const layers = stage ? Array.from(stage.querySelectorAll('[data-depth]')) : [];
   const boat = stage ? stage.querySelector('.journey-boat') : null;
   const slowStep = steps.find((step) => step.dataset.slow === 'true');
+  const decors = stage ? Array.from(stage.querySelectorAll('[data-decor]')) : [];
 
   const state = {
     boatPos: 0,
@@ -302,18 +370,15 @@ const createJourneyBlock = () => {
       card.classList.toggle('is-active', isActive);
       card.setAttribute('aria-hidden', isActive ? 'false' : 'true');
     });
+    decors.forEach((decor) => {
+      const decorIndex = Number.parseInt(decor.dataset.decor, 10);
+      decor.classList.toggle('is-active', decorIndex === index);
+    });
   };
 
   const update = (time, motionScale, block) => {
     const lerpFactor = reduceMotion ? 0.2 : TUNING.journey.lerp;
     block.smoothProgress = lerp(block.smoothProgress, block.targetProgress, lerpFactor);
-
-    const shift = TUNING.journey.maxShift * motionScale;
-    layers.forEach((layer) => {
-      const depth = Number.parseFloat(layer.dataset.depth) || 0.2;
-      const offset = block.smoothProgress * shift * depth;
-      layer.style.transform = `translate3d(-50%, ${offset}px, 0)`;
-    });
 
     if (!boat) {
       return;
@@ -353,11 +418,15 @@ const createJourneyBlock = () => {
 
 const onScroll = () => {
   latestScroll = window.scrollY;
+  updateEnvTarget(latestScroll);
   blocks.forEach((block) => block.updateTarget(latestScroll));
   updateHeader(latestScroll);
 };
 
 const recalc = () => {
+  updateEnvMetrics();
+  updateEnvTarget(latestScroll);
+  envState.smooth = envState.target;
   blocks.forEach((block) => block.updateMetrics());
   blocks.forEach((block) => block.updateTarget(latestScroll));
   blocks.forEach((block) => block.reset && block.reset(block));
@@ -365,6 +434,7 @@ const recalc = () => {
 
 const animate = (time) => {
   const motionScale = getMotionScale();
+  updateEnv(motionScale);
   blocks.forEach((block) => block.update(time, motionScale, block));
   rafId = window.requestAnimationFrame(animate);
 };
@@ -451,6 +521,23 @@ if (revealItems.length) {
     revealItems.forEach((item) => revealObserver.observe(item));
   } else {
     revealItems.forEach((item) => item.classList.add('is-inview'));
+  }
+}
+
+const sceneSections = Array.from(document.querySelectorAll('[data-scene]'));
+if (sceneSections.length) {
+  if ('IntersectionObserver' in window) {
+    const sceneObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          entry.target.classList.toggle('is-inview', entry.isIntersecting);
+        });
+      },
+      { threshold: 0.25, rootMargin: '-20% 0px -20% 0px' }
+    );
+    sceneSections.forEach((section) => sceneObserver.observe(section));
+  } else {
+    sceneSections.forEach((section) => section.classList.add('is-inview'));
   }
 }
 

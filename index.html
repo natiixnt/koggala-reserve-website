@@ -26,6 +26,18 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
+    <div id="env" aria-hidden="true">
+      <!-- Replace images in /images with your layered artwork. Separate your image into layers and replace in the main components, where the prototype is already set up. -->
+      <div class="env-layers">
+        <img src="images/layer-sky.webp" class="layer layer-sky" data-depth="0.08" alt="" />
+        <img src="images/layer-distant-trees.svg" class="layer layer-distant" data-depth="0.18" alt="" />
+        <img src="images/layer-mid-mangroves.svg" class="layer layer-mid" data-depth="0.32" alt="" />
+        <img src="images/layer-near-leaves.svg" class="layer layer-near" data-depth="0.48" alt="" />
+      </div>
+      <div class="water-shimmer"></div>
+      <div class="particles"></div>
+    </div>
+
     <a class="skip-link" href="#story">Skip to content</a>
 
     <header class="site-header">
@@ -70,39 +82,67 @@
       <section id="story" class="story" aria-labelledby="story-label">
         <h2 id="story-label" class="sr-only">Koggala Lake Boat Safari story</h2>
         <div class="story-stage">
-          <!-- Replace images in /images with your layered artwork. Separate your image into layers and replace in the main components, where the prototype is already set up. -->
-          <div class="parallax-layers story-layers" aria-hidden="true">
-            <img
-              src="images/layer-sky.webp"
-              class="layer layer-sky"
-              data-depth="0.12"
-              alt=""
-            />
-            <img
-              src="images/layer-distant-trees.svg"
-              class="layer layer-distant"
-              data-depth="0.22"
-              alt=""
-            />
-            <img
-              src="images/layer-mid-mangroves.svg"
-              class="layer layer-mid"
-              data-depth="0.34"
-              alt=""
-            />
-            <img
-              src="images/layer-near-leaves.svg"
-              class="layer layer-near"
-              data-depth="0.48"
-              alt=""
-            />
-          </div>
-
-          <div class="water-shimmer" aria-hidden="true"></div>
-          <div class="particles" aria-hidden="true"></div>
-
           <div class="story-boat" aria-hidden="true">
             <img src="images/boat.svg" alt="" />
+          </div>
+
+          <div class="side-decors" aria-hidden="true">
+            <img
+              class="side-decor left"
+              data-decor="0"
+              src="images/scene-left-mangroves.svg"
+              alt=""
+              style="--decor-y: -6%; --decor-scale: 0.95;"
+            />
+            <img
+              class="side-decor right"
+              data-decor="0"
+              src="images/scene-right-island.svg"
+              alt=""
+              style="--decor-y: -4%; --decor-scale: 0.92;"
+            />
+            <img
+              class="side-decor left"
+              data-decor="1"
+              src="images/scene-left-mangroves.svg"
+              alt=""
+              style="--decor-y: 2%; --decor-scale: 1;"
+            />
+            <img
+              class="side-decor right"
+              data-decor="1"
+              src="images/scene-right-island.svg"
+              alt=""
+              style="--decor-y: 4%; --decor-scale: 0.96;"
+            />
+            <img
+              class="side-decor left"
+              data-decor="2"
+              src="images/scene-left-mangroves.svg"
+              alt=""
+              style="--decor-y: -2%; --decor-scale: 1.04;"
+            />
+            <img
+              class="side-decor right"
+              data-decor="2"
+              src="images/scene-right-island.svg"
+              alt=""
+              style="--decor-y: 2%; --decor-scale: 1;"
+            />
+            <img
+              class="side-decor left"
+              data-decor="3"
+              src="images/scene-left-mangroves.svg"
+              alt=""
+              style="--decor-y: 6%; --decor-scale: 0.98;"
+            />
+            <img
+              class="side-decor right"
+              data-decor="3"
+              src="images/scene-right-island.svg"
+              alt=""
+              style="--decor-y: -6%; --decor-scale: 0.94;"
+            />
           </div>
 
           <div class="story-cards">
@@ -243,32 +283,81 @@
       <section id="journey" class="journey-story" aria-labelledby="journey-label">
         <h2 id="journey-label" class="sr-only">Journey highlights</h2>
         <div class="journey-stage">
-          <div class="journey-layers" aria-hidden="true">
-            <img
-              src="images/layer-sky.webp"
-              class="layer layer-sky"
-              data-depth="0.08"
-              alt=""
-            />
-            <img
-              src="images/layer-distant-trees.svg"
-              class="layer layer-distant"
-              data-depth="0.18"
-              alt=""
-            />
-            <img
-              src="images/layer-mid-mangroves.svg"
-              class="layer layer-mid"
-              data-depth="0.28"
-              alt=""
-            />
-          </div>
-
-          <div class="water-shimmer" aria-hidden="true"></div>
-          <div class="particles" aria-hidden="true"></div>
-
           <div class="journey-boat" aria-hidden="true">
             <img src="images/boat.svg" alt="" />
+          </div>
+
+          <div class="side-decors" aria-hidden="true">
+            <img
+              class="side-decor left"
+              data-decor="0"
+              src="images/scene-left-mangroves.svg"
+              alt=""
+              style="--decor-y: -4%; --decor-scale: 0.96;"
+            />
+            <img
+              class="side-decor right"
+              data-decor="0"
+              src="images/scene-right-island.svg"
+              alt=""
+              style="--decor-y: -6%; --decor-scale: 0.93;"
+            />
+            <img
+              class="side-decor left"
+              data-decor="1"
+              src="images/scene-left-mangroves.svg"
+              alt=""
+              style="--decor-y: 0%; --decor-scale: 1.02;"
+            />
+            <img
+              class="side-decor right"
+              data-decor="1"
+              src="images/scene-right-island.svg"
+              alt=""
+              style="--decor-y: 3%; --decor-scale: 0.98;"
+            />
+            <img
+              class="side-decor left"
+              data-decor="2"
+              src="images/scene-left-mangroves.svg"
+              alt=""
+              style="--decor-y: -2%; --decor-scale: 1;"
+            />
+            <img
+              class="side-decor right"
+              data-decor="2"
+              src="images/scene-right-island.svg"
+              alt=""
+              style="--decor-y: 2%; --decor-scale: 1.03;"
+            />
+            <img
+              class="side-decor left"
+              data-decor="3"
+              src="images/scene-left-mangroves.svg"
+              alt=""
+              style="--decor-y: 4%; --decor-scale: 0.98;"
+            />
+            <img
+              class="side-decor right"
+              data-decor="3"
+              src="images/scene-right-island.svg"
+              alt=""
+              style="--decor-y: -3%; --decor-scale: 0.96;"
+            />
+            <img
+              class="side-decor left"
+              data-decor="4"
+              src="images/scene-left-mangroves.svg"
+              alt=""
+              style="--decor-y: 6%; --decor-scale: 0.95;"
+            />
+            <img
+              class="side-decor right"
+              data-decor="4"
+              src="images/scene-right-island.svg"
+              alt=""
+              style="--decor-y: -4%; --decor-scale: 0.92;"
+            />
           </div>
 
           <div class="journey-cards">
@@ -359,7 +448,11 @@
         </div>
       </section>
 
-      <section id="tours" class="section section-soft" aria-labelledby="tours-title">
+      <section id="tours" class="section section-soft scene" aria-labelledby="tours-title" data-scene>
+        <div class="scene-decors" aria-hidden="true">
+          <img class="side-decor left" src="images/scene-left-mangroves.svg" alt="" />
+          <img class="side-decor right" src="images/scene-right-island.svg" alt="" />
+        </div>
         <div class="section-inner">
           <div class="section-head reveal">
             <p class="section-label">Tour options</p>
@@ -408,7 +501,11 @@
         </div>
       </section>
 
-      <section id="sights" class="section" aria-labelledby="sights-title">
+      <section id="sights" class="section scene" aria-labelledby="sights-title" data-scene>
+        <div class="scene-decors" aria-hidden="true">
+          <img class="side-decor left" src="images/scene-left-mangroves.svg" alt="" />
+          <img class="side-decor right" src="images/scene-right-island.svg" alt="" />
+        </div>
         <div class="section-inner">
           <div class="section-head reveal">
             <p class="section-label">What you will see</p>
@@ -439,7 +536,11 @@
         </div>
       </section>
 
-      <section id="practical" class="section" aria-labelledby="practical-title">
+      <section id="practical" class="section scene" aria-labelledby="practical-title" data-scene>
+        <div class="scene-decors" aria-hidden="true">
+          <img class="side-decor left" src="images/scene-left-mangroves.svg" alt="" />
+          <img class="side-decor right" src="images/scene-right-island.svg" alt="" />
+        </div>
         <div class="section-inner">
           <div class="section-head reveal">
             <p class="section-label">Practical info</p>
@@ -471,7 +572,11 @@
         </div>
       </section>
 
-      <section id="faq" class="section" aria-labelledby="faq-title">
+      <section id="faq" class="section scene" aria-labelledby="faq-title" data-scene>
+        <div class="scene-decors" aria-hidden="true">
+          <img class="side-decor left" src="images/scene-left-mangroves.svg" alt="" />
+          <img class="side-decor right" src="images/scene-right-island.svg" alt="" />
+        </div>
         <div class="section-inner">
           <div class="section-head reveal">
             <p class="section-label">FAQ</p>
@@ -502,7 +607,11 @@
         </div>
       </section>
 
-      <section id="whatsapp" class="section">
+      <section id="whatsapp" class="section scene" data-scene>
+        <div class="scene-decors" aria-hidden="true">
+          <img class="side-decor left" src="images/scene-left-mangroves.svg" alt="" />
+          <img class="side-decor right" src="images/scene-right-island.svg" alt="" />
+        </div>
         <div class="container">
           <div class="glass-card center reveal">
             <h2>Contact us on WhatsApp</h2>
