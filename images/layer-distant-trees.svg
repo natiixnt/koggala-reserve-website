@@ -1,0 +1,9 @@
+<svg width="1600" height="700" viewBox="0 0 1600 700" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Distant trees layer placeholder</title>
+  <desc id="desc">Replace with distant tree line artwork.</desc>
+  <rect width="1600" height="700" fill="#b9d1c6" />
+  <path d="M0 520 C200 470, 350 540, 520 500 C720 450, 880 540, 1080 500 C1260 470, 1420 520, 1600 480 L1600 700 L0 700 Z" fill="#6c9a8b" />
+  <text x="50%" y="35%" text-anchor="middle" font-size="40" fill="#ffffff" font-family="Arial, sans-serif" opacity="0.8">
+    DISTANT TREES
+  </text>
+</svg>

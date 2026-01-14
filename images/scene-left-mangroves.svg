@@ -1,0 +1,11 @@
+<svg width="700" height="600" viewBox="0 0 700 600" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Mangroves and birds scene placeholder</title>
+  <desc id="desc">Replace with left-side mangroves and birds artwork.</desc>
+  <rect width="700" height="600" rx="24" fill="#a2c7b8" />
+  <path d="M0 420 C120 360, 210 460, 360 410 C480 370, 600 430, 700 400 L700 600 L0 600 Z" fill="#2d5f4f" />
+  <circle cx="180" cy="200" r="22" fill="#f2b36f" />
+  <path d="M260 180 l40 20 l-40 20" stroke="#f7f2e8" stroke-width="6" fill="none" />
+  <text x="50%" y="80" text-anchor="middle" font-size="30" fill="#ffffff" font-family="Arial, sans-serif" opacity="0.9">
+    LEFT SCENE
+  </text>
+</svg>

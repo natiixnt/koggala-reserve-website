@@ -1,0 +1,17 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Koggala Lake Boat Safari</title>
+  <desc id="desc">Open Graph placeholder image. Replace with a real photo.</desc>
+  <defs>
+    <linearGradient id="og" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0f5b56" />
+      <stop offset="100%" stop-color="#f2b36f" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#og)" />
+  <text x="50%" y="45%" text-anchor="middle" font-size="64" fill="#f7f2e8" font-family="Arial, sans-serif">
+    Koggala Lake Boat Safari
+  </text>
+  <text x="50%" y="55%" text-anchor="middle" font-size="28" fill="#f7f2e8" font-family="Arial, sans-serif" opacity="0.9">
+    Replace with a real cover image
+  </text>
+</svg>
