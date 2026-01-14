@@ -242,31 +242,48 @@ strong {
   background: rgba(255, 255, 255, 0.35);
 }
 
-.hero {
+.story {
   position: relative;
-  min-height: 100vh;
-  padding: clamp(6rem, 10vw, 7rem) 0 clamp(4rem, 7vw, 5rem);
+  padding: 0;
+}
+
+.story-stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
 }
 
-.hero::after {
+.story-stage::after {
   content: "";
   position: absolute;
   inset: 0;
   background: linear-gradient(180deg, rgba(247, 242, 232, 0.2) 0%, rgba(247, 242, 232, 0.6) 60%, rgba(247, 242, 232, 0.95) 100%);
-  z-index: 1;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.story-steps {
+  position: relative;
+}
+
+.story-step {
+  min-height: 100vh;
 }
 
 .parallax-layers,
-.scene-layers,
 .water-shimmer,
 .particles {
   position: absolute;
   inset: 0;
   pointer-events: none;
+}
+
+.parallax-layers {
+  z-index: 1;
 }
 
 .layer {
@@ -299,30 +316,12 @@ strong {
   height: 55%;
 }
 
-.scene {
-  position: absolute;
-  bottom: 12%;
-  width: clamp(140px, 24vw, 320px);
-  opacity: 0;
-  transform: translate3d(0, 0, 0);
-  object-fit: contain;
-  will-change: transform, opacity;
-}
-
-.scene-left {
-  left: 4%;
-}
-
-.scene-right {
-  right: 4%;
-}
-
 .water-shimmer {
   background: linear-gradient(120deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.18));
   mix-blend-mode: screen;
   opacity: 0.4;
   animation: shimmer 16s linear infinite;
-  z-index: 1;
+  z-index: 2;
 }
 
 .particles {
@@ -334,16 +333,58 @@ strong {
     radial-gradient(circle at 55% 20%, rgba(255, 255, 255, 0.2) 0 2px, transparent 3px);
   animation: float 18s ease-in-out infinite;
   opacity: 0.45;
-  z-index: 1;
+  z-index: 2;
 }
 
-.hero-content {
-  position: relative;
-  z-index: 2;
-  max-width: 640px;
+.story-boat {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  z-index: 3;
+  will-change: transform;
+}
+
+.story-boat img {
+  width: clamp(280px, 30vw, 560px);
+  display: block;
+  filter: drop-shadow(0 18px 30px rgba(10, 20, 20, 0.2));
+}
+
+.story-cards {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  padding: 0 var(--gutter);
+}
+
+.story-card {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: min(680px, 90vw);
   padding: 2.4rem;
   border-radius: var(--radius-lg);
+  background: var(--glass);
+  backdrop-filter: blur(12px);
   box-shadow: var(--shadow);
+  opacity: 0;
+  transform: translate3d(-50%, calc(-50% + 24px), 0);
+  filter: blur(8px);
+  pointer-events: none;
+  transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.story-card.is-active {
+  opacity: 1;
+  transform: translate3d(-50%, -50%, 0);
+  filter: blur(0);
+  pointer-events: auto;
+}
+
+.story-card .cta-group {
+  margin-top: 1.25rem;
 }
 
 .glass {
@@ -395,21 +436,6 @@ strong {
   border-radius: 999px;
 }
 
-.boat-overlay {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 4;
-}
-
-#boat {
-  position: absolute;
-  left: 50%;
-  width: clamp(140px, 20vw, 240px);
-  filter: drop-shadow(0 12px 22px rgba(10, 20, 20, 0.2));
-  transform: translate3d(-50%, 0, 0);
-  will-change: transform;
-}
 
 .section .two-col {
   display: grid;
@@ -841,7 +867,7 @@ strong {
     display: none;
   }
 
-  .hero-content {
+  .story-card {
     padding: 2rem;
   }
 }
@@ -892,6 +918,12 @@ strong {
     scroll-behavior: auto;
   }
 
+  .story-card {
+    transition: opacity 0.2s ease;
+    transform: translate3d(-50%, -50%, 0);
+    filter: none;
+  }
+
   .water-shimmer,
   .particles {
     animation: none;
@@ -901,4 +933,10 @@ strong {
 body.reduced-motion .water-shimmer,
 body.reduced-motion .particles {
   animation: none;
+}
+
+body.reduced-motion .story-card {
+  transition: opacity 0.2s ease;
+  transform: translate3d(-50%, -50%, 0);
+  filter: none;
 }

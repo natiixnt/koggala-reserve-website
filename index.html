@@ -30,7 +30,7 @@
 
     <header class="site-header">
       <div class="nav-shell">
-        <a class="logo" href="#hero" aria-label="Koggala Lake Boat Safari">Koggala Lake</a>
+        <a class="logo" href="#story" aria-label="Koggala Lake Boat Safari">Koggala Lake</a>
         <nav class="site-nav" id="site-nav" aria-label="Primary">
           <a href="#about">About</a>
           <a href="#tours">Tour options</a>
@@ -65,92 +65,127 @@
       </div>
     </header>
 
-    <div class="boat-overlay" aria-hidden="true">
-      <img src="images/boat.svg" id="boat" alt="" />
-    </div>
-
     <main>
-      <section id="hero" class="hero" aria-labelledby="hero-title">
-        <!-- Replace images in /images with your layered artwork. Separate your image into layers and replace in the main components, where the prototype is already set up. -->
-        <div class="parallax-layers" aria-hidden="true">
-          <img
-            src="images/layer-sky.webp"
-            class="layer layer-sky"
-            data-speed="0.08"
-            alt="Soft tropical sky layer"
-          />
-          <img
-            src="images/layer-distant-trees.svg"
-            class="layer layer-distant"
-            data-speed="0.18"
-            alt="Distant tree line layer"
-          />
-          <img
-            src="images/layer-mid-mangroves.svg"
-            class="layer layer-mid"
-            data-speed="0.32"
-            alt="Mangrove mid layer"
-          />
-          <img
-            src="images/layer-near-leaves.svg"
-            class="layer layer-near"
-            data-speed="0.48"
-            alt="Foreground leaves layer"
-          />
+      <section id="story" class="story" aria-labelledby="story-title">
+        <div class="story-stage">
+          <!-- Replace images in /images with your layered artwork. Separate your image into layers and replace in the main components, where the prototype is already set up. -->
+          <div class="parallax-layers story-layers" aria-hidden="true">
+            <img
+              src="images/layer-sky.webp"
+              class="layer layer-sky"
+              data-depth="0.12"
+              alt=""
+            />
+            <img
+              src="images/layer-distant-trees.svg"
+              class="layer layer-distant"
+              data-depth="0.22"
+              alt=""
+            />
+            <img
+              src="images/layer-mid-mangroves.svg"
+              class="layer layer-mid"
+              data-depth="0.34"
+              alt=""
+            />
+            <img
+              src="images/layer-near-leaves.svg"
+              class="layer layer-near"
+              data-depth="0.48"
+              alt=""
+            />
+          </div>
+
+          <div class="water-shimmer" aria-hidden="true"></div>
+          <div class="particles" aria-hidden="true"></div>
+
+          <div class="story-boat" aria-hidden="true">
+            <img src="images/boat.svg" alt="" />
+          </div>
+
+          <div class="story-cards">
+            <article class="story-card is-active" data-card="0" aria-hidden="false">
+              <p class="eyebrow">Koggala Lake, Sri Lanka</p>
+              <h1 id="story-title">Koggala Lake Boat Safari</h1>
+              <p class="hero-line">
+                Glide across Koggala Lake and discover hidden mangrove paths, island views, and
+                peaceful wildlife moments.
+              </p>
+              <p class="hero-sub">
+                A calm journey through mangroves, islands, and wildlife - minutes from the south
+                coast.
+              </p>
+              <div class="cta-group">
+                <a
+                  class="btn btn-primary"
+                  href="https://wa.me/94761755558?text=Hi%20-%20I%27m%20interested%20in%20a%20boat%20tour.%20Can%20you%20share%20details%3F"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  Chat on WhatsApp
+                </a>
+                <a class="btn btn-secondary" href="#tours">View tour details</a>
+              </div>
+              <p class="cta-helper">Limited boats per time slot - book early for sunrise and sunset.</p>
+              <div class="trust-row">
+                <span>Local guide</span>
+                <span>Private options</span>
+                <span>Sunrise or sunset</span>
+              </div>
+              <p class="microcopy">Life jackets provided - calm waters, experienced local guide.</p>
+            </article>
+
+            <article class="story-card" data-card="1" aria-hidden="true">
+              <p class="eyebrow">About the lake</p>
+              <h2>Wide water, soft light</h2>
+              <p>
+                A calm, scenic lake with open horizons, peaceful surroundings, and beautiful light
+                throughout the day. Ideal for a relaxed cruise and quiet reset.
+              </p>
+              <ul class="checklist">
+                <li>Open water views and tranquil shoreline scenery</li>
+                <li>Best photo spots and golden-hour reflections</li>
+                <li>Quiet areas for a slow, relaxing ride</li>
+              </ul>
+            </article>
+
+            <article class="story-card" data-card="2" aria-hidden="true">
+              <p class="eyebrow">Tour options</p>
+              <h2>Choose your pace</h2>
+              <ul class="checklist">
+                <li>Classic Lake Loop - 1.5-2 hours</li>
+                <li>Sunset Safari - 2 hours</li>
+                <li>Extended Wildlife + Islands - 3 hours</li>
+              </ul>
+              <div class="cta-group">
+                <a class="btn btn-secondary" href="#tours">View tour details</a>
+              </div>
+            </article>
+
+            <article class="story-card" data-card="3" aria-hidden="true">
+              <p class="eyebrow">Ready to sail</p>
+              <h2>Book on WhatsApp</h2>
+              <p>Message us for availability and the best time for your trip.</p>
+              <div class="cta-group">
+                <a
+                  class="btn btn-primary"
+                  href="https://wa.me/94761755558?text=Hi%20-%20I%20saw%20your%20website%20and%20want%20to%20ask%20about%20a%20tour."
+                  target="_blank"
+                  rel="noopener"
+                >
+                  Open WhatsApp chat
+                </a>
+              </div>
+              <p class="microcopy">We reply within a few hours.</p>
+            </article>
+          </div>
         </div>
 
-        <div class="scene-layers" aria-hidden="true">
-          <img
-            src="images/scene-left-mangroves.svg"
-            class="scene scene-left"
-            data-scene
-            data-start="0.0"
-            data-end="0.65"
-            data-shift="70"
-            alt="Mangroves and birds scene"
-          />
-          <img
-            src="images/scene-right-island.svg"
-            class="scene scene-right"
-            data-scene
-            data-start="0.35"
-            data-end="0.98"
-            data-shift="70"
-            alt="Small island with palms scene"
-          />
-        </div>
-
-        <div class="water-shimmer" aria-hidden="true"></div>
-        <div class="particles" aria-hidden="true"></div>
-
-        <div class="hero-content glass">
-          <p class="eyebrow">Koggala Lake, Sri Lanka</p>
-          <h1 id="hero-title">Koggala Lake Boat Safari</h1>
-          <p class="hero-line">
-            Glide across Koggala Lake and discover hidden mangrove paths, island views, and peaceful
-            wildlife moments.
-          </p>
-          <p class="hero-sub">
-            A calm journey through mangroves, islands, and wildlife - minutes from the south coast.
-          </p>
-          <div class="cta-group">
-            <a
-              class="btn btn-primary"
-              href="https://wa.me/94761755558?text=Hi%20-%20I%27m%20interested%20in%20a%20boat%20tour.%20Can%20you%20share%20details%3F"
-              target="_blank"
-              rel="noopener"
-            >
-              Chat on WhatsApp
-            </a>
-            <a class="btn btn-secondary" href="#tours">View tour details</a>
-          </div>
-          <p class="cta-helper">Limited boats per time slot - book early for sunrise and sunset.</p>
-          <div class="trust-row">
-            <span>Local guide</span>
-            <span>Private options</span>
-            <span>Sunrise or sunset</span>
-          </div>
-          <p class="microcopy">Life jackets provided - calm waters, experienced local guide.</p>
+        <div class="story-steps" aria-hidden="true">
+          <div class="story-step" data-step="0"></div>
+          <div class="story-step" data-step="1"></div>
+          <div class="story-step" data-step="2" data-slow="true"></div>
+          <div class="story-step" data-step="3"></div>
         </div>
       </section>
 
@@ -549,7 +584,7 @@
           <p>Premium, calm lake journeys in southern Sri Lanka.</p>
         </div>
         <div class="footer-links">
-          <a href="#hero">Home</a>
+          <a href="#story">Home</a>
           <a href="#tours">Tours</a>
           <a href="#practical">Practical info</a>
           <a href="#whatsapp">WhatsApp</a>

@@ -4,28 +4,52 @@ const navToggle = document.querySelector('.nav-toggle');
 const nav = document.getElementById('site-nav');
 const navLinks = nav ? Array.from(nav.querySelectorAll('a')) : [];
 
-const hero = document.getElementById('hero');
-const layers = Array.from(document.querySelectorAll('[data-speed]'));
-const scenes = Array.from(document.querySelectorAll('[data-scene]'));
-const boat = document.getElementById('boat');
-const boatWrap = document.querySelector('.boat-overlay');
-const toursSection = document.getElementById('tours');
+const story = document.querySelector('.story');
+const storyStage = document.querySelector('.story-stage');
+const storyLayers = Array.from(document.querySelectorAll('[data-depth]'));
+const storyBoat = document.querySelector('.story-boat');
+const storyCards = Array.from(document.querySelectorAll('.story-card'));
+const storySteps = Array.from(document.querySelectorAll('.story-step'));
 
 const reduceMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
 let reduceMotion = reduceMotionQuery.matches;
 
+const TUNING = {
+  lerp: {
+    parallax: 0.08, // higher = snappier, lower = smoother
+    boat: 0.1, // boat inertia during regular steps
+    boatSlow: 0.05, // boat inertia on the slow step
+  },
+  parallax: {
+    maxShift: 140, // px total travel for the nearest layer
+  },
+  boat: {
+    baseY: 0.58, // stage height ratio for the boat anchor
+    travel: 0.12, // extra vertical travel across the story
+    driftX: 18, // px side drift
+    bobY: 8, // px vertical bob
+    tilt: 1.4, // degrees of tilt
+    driftSpeedX: 4200, // ms cycle length
+    driftSpeedY: 2800, // ms cycle length
+  },
+  motionScale: {
+    mobile: 0.5, // reduce motion on small screens
+    reduced: 0.2, // reduce parallax when prefers-reduced-motion
+  },
+};
+
 let latestScroll = window.scrollY;
+let targetProgress = 0;
+let smoothProgress = 0;
 let boatPos = 0;
-let pauseUntil = 0;
+let activeStep = -1;
+let slowStepIndex = -1;
 let rafId = null;
+let useStepFallback = true;
 let metrics = {
-  heroTop: 0,
-  heroHeight: 0,
-  docHeight: 0,
-  pauseStart: 0,
-  pauseEnd: 0,
-  baseBoat: 0,
-  boatTravel: 0,
+  storyTop: 0,
+  storyHeight: 0,
+  stageHeight: 0,
 };
 
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
@@ -44,73 +68,93 @@ const closeNav = () => {
 };
 
 const recalc = () => {
-  metrics.heroTop = hero ? hero.offsetTop : 0;
-  metrics.heroHeight = hero ? hero.offsetHeight : 1;
-  metrics.docHeight = Math.max(document.documentElement.scrollHeight - window.innerHeight, 1);
-  metrics.baseBoat = window.innerHeight * 0.12;
-  metrics.boatTravel = window.innerHeight * 0.55;
+  if (!story || !storyStage) {
+    return;
+  }
+  metrics.storyTop = story.offsetTop;
+  metrics.storyHeight = story.offsetHeight;
+  metrics.stageHeight = storyStage.offsetHeight;
+};
 
-  if (toursSection) {
-    metrics.pauseStart = toursSection.offsetTop - window.innerHeight * 0.6;
-    metrics.pauseEnd = toursSection.offsetTop + window.innerHeight * 0.2;
+const setActiveStep = (index) => {
+  if (!storyCards.length) {
+    return;
+  }
+  const nextIndex = clamp(index, 0, storyCards.length - 1);
+  if (nextIndex === activeStep) {
+    return;
+  }
+  activeStep = nextIndex;
+  storyCards.forEach((card, cardIndex) => {
+    const isActive = cardIndex === activeStep;
+    card.classList.toggle('is-active', isActive);
+    card.setAttribute('aria-hidden', isActive ? 'false' : 'true');
+  });
+};
+
+const updateStoryTargets = () => {
+  if (!story) {
+    return;
+  }
+  const maxScroll = Math.max(metrics.storyHeight - window.innerHeight, 1);
+  targetProgress = clamp((latestScroll - metrics.storyTop) / maxScroll, 0, 1);
+
+  if (useStepFallback && storySteps.length) {
+    const fallbackIndex = Math.round(targetProgress * (storySteps.length - 1));
+    setActiveStep(fallbackIndex);
   }
 };
 
-const updateParallax = (time) => {
-  const scrollY = latestScroll;
-  const heroProgress = hero
-    ? clamp((scrollY - metrics.heroTop) / metrics.heroHeight, 0, 1)
-    : 0;
-  const scrollProgress = clamp(scrollY / metrics.docHeight, 0, 1);
-  const motionScale = reduceMotion ? 0.2 : 1;
-  const mobileScale = window.innerWidth < 768 ? 0.4 : 1;
+const updateStory = (time) => {
+  if (!storyStage) {
+    return;
+  }
+  const motionScale = reduceMotion ? TUNING.motionScale.reduced : 1;
+  const mobileScale = window.innerWidth < 768 ? TUNING.motionScale.mobile : 1;
   const parallaxScale = motionScale * mobileScale;
+  const lerpFactor = reduceMotion ? 0.2 : TUNING.lerp.parallax;
 
-  layers.forEach((layer) => {
-    const speed = parseFloat(layer.dataset.speed) || 0.2;
-    const offset = (scrollY - metrics.heroTop) * speed * parallaxScale;
+  smoothProgress = lerp(smoothProgress, targetProgress, lerpFactor);
+
+  storyLayers.forEach((layer) => {
+    const depth = parseFloat(layer.dataset.depth) || 0.2;
+    const offset = smoothProgress * TUNING.parallax.maxShift * depth * parallaxScale;
     layer.style.transform = `translate3d(-50%, ${offset}px, 0)`;
   });
 
-  scenes.forEach((scene) => {
-    const start = parseFloat(scene.dataset.start) || 0;
-    const end = parseFloat(scene.dataset.end) || 1;
-    const shift = parseFloat(scene.dataset.shift) || 60;
-    const t = clamp((heroProgress - start) / (end - start), 0, 1);
-    const phase = t < 0.5 ? t * 2 : (1 - t) * 2;
-    const direction = scene.classList.contains('scene-left') ? -1 : 1;
-    const x = direction * (1 - phase) * shift;
-    const y = (1 - phase) * 10;
-    scene.style.opacity = phase.toFixed(3);
-    scene.style.transform = `translate3d(${x}px, ${y}px, 0)`;
-  });
+  if (storyBoat) {
+    const base = metrics.stageHeight * TUNING.boat.baseY;
+    const travel = metrics.stageHeight * TUNING.boat.travel;
+    const targetBoat = base + smoothProgress * travel;
+    const boatLerp = reduceMotion
+      ? 0.2
+      : activeStep === slowStepIndex
+        ? TUNING.lerp.boatSlow
+        : TUNING.lerp.boat;
+    boatPos = lerp(boatPos, targetBoat, boatLerp);
 
-  if (boat && boatWrap) {
-    const targetBoat = metrics.baseBoat + scrollProgress * metrics.boatTravel;
-    const inPause = scrollY > metrics.pauseStart && scrollY < metrics.pauseEnd;
-    const inTimedPause = time < pauseUntil;
-    const smooth = reduceMotion ? 0.2 : inTimedPause ? 0.02 : inPause ? 0.03 : 0.12;
-    boatPos = lerp(boatPos, targetBoat, smooth);
+    const driftScale = reduceMotion ? 0 : parallaxScale;
+    const driftX = Math.sin(time / TUNING.boat.driftSpeedX) * TUNING.boat.driftX * driftScale;
+    const bob = Math.sin(time / TUNING.boat.driftSpeedY) * TUNING.boat.bobY * driftScale;
+    const tilt = reduceMotion
+      ? 0
+      : Math.sin(time / (TUNING.boat.driftSpeedY * 1.2)) * TUNING.boat.tilt * driftScale;
 
-    const bob = reduceMotion ? 0 : Math.sin(time / 850) * 6;
-    const tilt = reduceMotion ? 0 : Math.sin(time / 1100) * 1.4;
-    boat.style.transform = `translate3d(-50%, ${boatPos + bob}px, 0) rotate(${tilt}deg)`;
-
-    const fade = clamp(1 - heroProgress * 0.45, 0.2, 1);
-    boatWrap.style.opacity = fade.toFixed(2);
+    storyBoat.style.transform = `translate3d(calc(-50% + ${driftX}px), ${boatPos + bob}px, 0) rotate(${tilt}deg)`;
   }
 
   if (header) {
-    header.classList.toggle('scrolled', scrollY > 12);
+    header.classList.toggle('scrolled', latestScroll > 12);
   }
 };
 
 const onScroll = () => {
   latestScroll = window.scrollY;
+  updateStoryTargets();
 };
 
 const animate = (time) => {
-  updateParallax(time);
+  updateStory(time);
   rafId = window.requestAnimationFrame(animate);
 };
 
@@ -149,7 +193,14 @@ window.addEventListener('scroll', onScroll, { passive: true });
 const init = () => {
   setReducedMotion(reduceMotionQuery.matches);
   recalc();
-  boatPos = metrics.baseBoat;
+  if (storyStage) {
+    boatPos = metrics.stageHeight * TUNING.boat.baseY;
+  }
+  if (storySteps.length) {
+    const slowStep = storySteps.find((step) => step.dataset.slow === 'true');
+    slowStepIndex = slowStep ? Number.parseInt(slowStep.dataset.step, 10) : -1;
+  }
+  setActiveStep(0);
   onScroll();
   if (!rafId) {
     rafId = window.requestAnimationFrame(animate);
@@ -162,18 +213,29 @@ if (document.readyState === 'loading') {
   init();
 }
 
-if (toursSection && 'IntersectionObserver' in window) {
-  const tourObserver = new IntersectionObserver(
+if (storySteps.length && 'IntersectionObserver' in window) {
+  const stepRatios = new Map();
+  const stepObserver = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
+        const index = Number.parseInt(entry.target.dataset.step, 10);
         if (entry.isIntersecting) {
-          pauseUntil = performance.now() + 700;
+          stepRatios.set(index, entry.intersectionRatio);
+        } else {
+          stepRatios.delete(index);
         }
       });
+      if (!stepRatios.size) {
+        return;
+      }
+      const [nextIndex] = [...stepRatios.entries()].sort((a, b) => b[1] - a[1])[0];
+      setActiveStep(nextIndex);
     },
-    { threshold: 0.3 }
+    { threshold: 0.45, rootMargin: '-35% 0px -35% 0px' }
   );
-  tourObserver.observe(toursSection);
+
+  storySteps.forEach((step) => stepObserver.observe(step));
+  useStepFallback = false;
 }
 
 const carousel = document.querySelector('[data-carousel]');
