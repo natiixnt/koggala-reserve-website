@@ -221,6 +221,11 @@ strong {
   margin: 0 auto;
 }
 
+.container {
+  width: min(1120px, 92vw);
+  margin: 0 auto;
+}
+
 .section-head {
   margin-bottom: 2.5rem;
 }
@@ -435,11 +440,59 @@ strong {
   gap: 1.8rem;
 }
 
+.grid-2 {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.grid-3 {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
 .card {
   background: rgba(255, 255, 255, 0.86);
   border-radius: var(--radius);
   padding: 1.6rem;
   box-shadow: var(--shadow);
+}
+
+.glass-card {
+  background: var(--glass);
+  border-radius: var(--radius);
+  padding: 1.6rem;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(10px);
+}
+
+.glass-card.center {
+  text-align: center;
+}
+
+.checklist {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0 0;
+  display: grid;
+  gap: 0.6rem;
+}
+
+.checklist li {
+  position: relative;
+  padding-left: 1.4rem;
+}
+
+.checklist li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.45rem;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--sunset);
 }
 
 .tour-card ul {
@@ -661,6 +714,35 @@ strong {
   margin: 0.3rem 0;
 }
 
+.section-cta {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+.contact-line {
+  margin-top: 0.5rem;
+}
+
+.gallery {
+  display: grid;
+  gap: 0.9rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.gallery-item {
+  margin: 0;
+}
+
+.gallery-item img {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 16px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+}
+
 .site-footer {
   padding: 3rem 0 2rem;
   background: rgba(12, 40, 36, 0.95);
@@ -710,6 +792,23 @@ strong {
   }
 }
 
+@media (max-width: 900px) {
+  .grid-2,
+  .grid-3 {
+    grid-template-columns: 1fr;
+  }
+
+  .gallery {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 520px) {
+  .gallery {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 860px) {
   .site-nav {
     position: fixed;
@@ -738,13 +837,27 @@ strong {
     display: inline-flex;
   }
 
-  .nav-cta .btn-ghost {
+  .nav-cta .btn {
     display: none;
   }
 
   .hero-content {
     padding: 2rem;
   }
+}
+
+.wa-float {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 9999;
+  padding: 12px 14px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #fff;
+  text-decoration: none;
 }
 
 @media (min-width: 980px) {
