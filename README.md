@@ -2,13 +2,15 @@
 
 ## Storytelling tuning
 
-- `script.js` -> `TUNING` controls the feel of the story section.
-- Adjust `TUNING.parallax.maxShift` to increase/decrease layer depth.
-- Adjust `TUNING.lerp.parallax` / `TUNING.lerp.boat` to make motion snappier or smoother.
-- Adjust `TUNING.boat.*` values for boat size, drift, bob, and tilt behavior.
+- `script.js` -> `TUNING.story` and `TUNING.journey` control parallax depth and boat motion.
+- Adjust `maxShift` to increase/decrease layer depth for each story block.
+- Adjust `lerp` and boat `lerp` values to make motion snappier or smoother.
+- Use `TUNING.motionScale` to reduce motion on mobile or for reduced-motion users.
 
-## Add or remove a story step
+## Add or remove steps
 
-- `index.html` -> update `.story-cards` and `.story-steps` so `data-card` and `data-step` indices stay sequential (0..n).
-- Keep the number of `.story-card` elements the same as `.story-step` elements.
-- To slow the boat on a step, add `data-slow="true"` to the matching `.story-step`.
+- `index.html` -> keep the number of cards and steps equal for each block.
+- Story block: `.story-card` and `.story-step` with sequential `data-card` / `data-step` (0..n).
+- Gallery block: `.gallery-frame` and `.gallery-step` with matching indices.
+- Journey block: `.journey-card` and `.journey-step` with matching indices.
+- To slow the boat on a step, add `data-slow="true"` to the matching step.

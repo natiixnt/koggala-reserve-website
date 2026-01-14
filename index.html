@@ -26,13 +26,15 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <a class="skip-link" href="#about">Skip to content</a>
+    <a class="skip-link" href="#story">Skip to content</a>
 
     <header class="site-header">
       <div class="nav-shell">
         <a class="logo" href="#story" aria-label="Koggala Lake Boat Safari">Koggala Lake</a>
         <nav class="site-nav" id="site-nav" aria-label="Primary">
-          <a href="#about">About</a>
+          <a href="#story">Story</a>
+          <a href="#gallery">Gallery</a>
+          <a href="#journey">Journey</a>
           <a href="#tours">Tour options</a>
           <a href="#sights">What you will see</a>
           <a href="#itinerary">Itinerary</a>
@@ -66,7 +68,8 @@
     </header>
 
     <main>
-      <section id="story" class="story" aria-labelledby="story-title">
+      <section id="story" class="story" aria-labelledby="story-label">
+        <h2 id="story-label" class="sr-only">Koggala Lake Boat Safari story</h2>
         <div class="story-stage">
           <!-- Replace images in /images with your layered artwork. Separate your image into layers and replace in the main components, where the prototype is already set up. -->
           <div class="parallax-layers story-layers" aria-hidden="true">
@@ -106,7 +109,7 @@
           <div class="story-cards">
             <article class="story-card is-active" data-card="0" aria-hidden="false">
               <p class="eyebrow">Koggala Lake, Sri Lanka</p>
-              <h1 id="story-title">Koggala Lake Boat Safari</h1>
+              <h1>Koggala Lake Boat Safari</h1>
               <p class="hero-line">
                 Glide across Koggala Lake and discover hidden mangrove paths, island views, and
                 peaceful wildlife moments.
@@ -189,137 +192,162 @@
         </div>
       </section>
 
-      <section id="about" class="section" aria-labelledby="about-title">
-        <div class="section-inner">
-          <div class="section-head">
-            <p class="section-label">About the experience</p>
-            <h2 id="about-title">Slow travel on Koggala Lake</h2>
-          </div>
-          <div class="two-col">
-            <div class="prose">
-              <p>
-                Drift into quiet waterways where mangrove roots lace the shoreline and the light stays
-                soft on the water. This safari is designed for calm, unhurried exploration with a local
-                guide who knows the islands, birds, and hidden channels of Koggala Lake.
-              </p>
-              <p>
-                Expect gentle wildlife encounters, easy photo moments, and time to pause at small
-                islands for local stories. Every cruise is tailored to the pace you want - perfect for
-                couples, families, or solo travelers seeking a mindful escape.
-              </p>
-              <p>
-                Choose sunrise, daylight, or sunset. Each time brings different colors, bird activity,
-                and peaceful lake energy.
-              </p>
-            </div>
-            <ul class="highlight-list">
-              <li>Mangrove tunnels</li>
-              <li>Bird spotting</li>
-              <li>Island stops</li>
-              <li>Photo friendly pace</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      <section id="lake" class="section">
-        <div class="container">
-          <header class="section-head">
-            <h2>About the lake</h2>
-            <p>
-              A calm, scenic lake with wide open water, peaceful surroundings, and beautiful light
-              throughout the day. Perfect for a relaxed cruise, photos, and a quiet escape from the
-              busy city.
-            </p>
-          </header>
-
-          <div class="grid-2">
-            <div class="glass-card">
-              <h3>What you will see</h3>
-              <ul class="checklist">
-                <li>Open water views and tranquil shoreline scenery</li>
-                <li>Best photo spots and golden-hour reflections</li>
-                <li>Quiet areas for a slow, relaxing ride</li>
-              </ul>
-            </div>
-
-            <div class="glass-card">
-              <h3>Best time to go</h3>
-              <ul class="checklist">
-                <li>Morning - fresh air and calm water</li>
-                <li>Sunset - the most beautiful light for photos</li>
-                <li>Flexible timing - we can plan around your schedule</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="service" class="section">
-        <div class="container">
-          <header class="section-head">
-            <h2>Our service</h2>
-            <p>
-              Private boat experiences with a simple booking flow on WhatsApp. We focus on comfort,
-              safety, and a premium, calm trip.
-            </p>
-          </header>
-
-          <div class="grid-3">
-            <div class="glass-card">
-              <h3>Private tours</h3>
-              <p>Ideal for couples, families, or small groups. Your timing, your pace.</p>
-            </div>
-            <div class="glass-card">
-              <h3>Safe and comfortable</h3>
-              <p>Clear instructions, easy boarding, and a smooth ride designed for relaxation.</p>
-            </div>
-            <div class="glass-card">
-              <h3>Simple booking</h3>
-              <p>No forms. Just message us on WhatsApp and we confirm your slot.</p>
-            </div>
+      <section id="gallery" class="gallery-story" aria-labelledby="gallery-title">
+        <div class="gallery-stage">
+          <div class="gallery-header glass">
+            <p class="eyebrow">Gallery</p>
+            <h2 id="gallery-title">Real moments on Koggala Lake</h2>
+            <p>Scroll to reveal the atmosphere, light, and calm pace of the lake.</p>
           </div>
 
-          <div class="section-cta">
-            <a
-              class="btn btn-primary"
-              href="https://wa.me/94761755558?text=Hi%20-%20I%27d%20like%20to%20book%20a%20tour.%20What%20options%20do%20you%20have%3F"
-              target="_blank"
-              rel="noopener"
-            >
-              Book via WhatsApp
-            </a>
-          </div>
-        </div>
-      </section>
-
-      <section id="gallery" class="section">
-        <div class="container">
-          <header class="section-head">
-            <h2>Gallery</h2>
-            <p>Real moments from the lake - views, boat, and tour atmosphere.</p>
-          </header>
-
-          <div class="gallery">
-            <figure class="gallery-item">
+          <div class="gallery-frames" aria-hidden="true">
+            <figure class="gallery-frame is-active" data-frame="0">
               <img src="images/gallery-01.jpg" alt="Lake view during a calm boat tour" loading="lazy" />
             </figure>
-            <figure class="gallery-item">
+            <figure class="gallery-frame" data-frame="1">
               <img src="images/gallery-02.jpg" alt="Boat on the lake at sunset" loading="lazy" />
             </figure>
-            <figure class="gallery-item">
+            <figure class="gallery-frame" data-frame="2">
               <img src="images/gallery-03.jpg" alt="Scenic shoreline view" loading="lazy" />
             </figure>
-            <figure class="gallery-item">
+            <figure class="gallery-frame" data-frame="3">
               <img src="images/gallery-04.jpg" alt="Relaxing cruise atmosphere" loading="lazy" />
             </figure>
-            <figure class="gallery-item">
+            <figure class="gallery-frame" data-frame="4">
               <img src="images/gallery-05.jpg" alt="Water texture and reflections" loading="lazy" />
             </figure>
-            <figure class="gallery-item">
+            <figure class="gallery-frame" data-frame="5">
               <img src="images/gallery-06.jpg" alt="Tour highlights - photo spot" loading="lazy" />
             </figure>
           </div>
+        </div>
+
+        <div class="gallery-steps" aria-hidden="true">
+          <div class="gallery-step" data-step="0"></div>
+          <div class="gallery-step" data-step="1"></div>
+          <div class="gallery-step" data-step="2"></div>
+          <div class="gallery-step" data-step="3"></div>
+          <div class="gallery-step" data-step="4"></div>
+          <div class="gallery-step" data-step="5"></div>
+        </div>
+      </section>
+
+      <section id="journey" class="journey-story" aria-labelledby="journey-label">
+        <h2 id="journey-label" class="sr-only">Journey highlights</h2>
+        <div class="journey-stage">
+          <div class="journey-layers" aria-hidden="true">
+            <img
+              src="images/layer-sky.webp"
+              class="layer layer-sky"
+              data-depth="0.08"
+              alt=""
+            />
+            <img
+              src="images/layer-distant-trees.svg"
+              class="layer layer-distant"
+              data-depth="0.18"
+              alt=""
+            />
+            <img
+              src="images/layer-mid-mangroves.svg"
+              class="layer layer-mid"
+              data-depth="0.28"
+              alt=""
+            />
+          </div>
+
+          <div class="water-shimmer" aria-hidden="true"></div>
+          <div class="particles" aria-hidden="true"></div>
+
+          <div class="journey-boat" aria-hidden="true">
+            <img src="images/boat.svg" alt="" />
+          </div>
+
+          <div class="journey-cards">
+            <article class="journey-card is-active" data-card="0" aria-hidden="false">
+              <p class="eyebrow">About the lake</p>
+              <h2>A calm lake with wide views</h2>
+              <p>
+                A peaceful, scenic lake with open horizons and soft light. Ideal for a relaxed cruise
+                and a quiet break from the coast.
+              </p>
+              <ul class="checklist">
+                <li>Open water views and tranquil shoreline scenery</li>
+                <li>Easy pacing for photos and quiet moments</li>
+                <li>Local guide stories along the way</li>
+              </ul>
+            </article>
+
+            <article class="journey-card" data-card="1" aria-hidden="true">
+              <p class="eyebrow">Golden hour</p>
+              <h2>Sunset light on the water</h2>
+              <p>
+                The lake glows in late afternoon. We time the cruise so you get the best reflections
+                and calm water.
+              </p>
+              <ul class="checklist">
+                <li>Soft sunset colors and warm tones</li>
+                <li>Quieter channels for an easy ride</li>
+                <li>Ideal for couples and photographers</li>
+              </ul>
+            </article>
+
+            <article class="journey-card" data-card="2" aria-hidden="true">
+              <p class="eyebrow">Private comfort</p>
+              <h2>Your boat, your pace</h2>
+              <p>
+                Private tours for couples, families, and small groups. Calm waters, life jackets, and a
+                smooth ride focused on comfort.
+              </p>
+              <ul class="checklist">
+                <li>Experienced local guide</li>
+                <li>Easy boarding and clear instructions</li>
+                <li>Family-friendly and safe</li>
+              </ul>
+            </article>
+
+            <article class="journey-card" data-card="3" aria-hidden="true">
+              <p class="eyebrow">Photo spots</p>
+              <h2>Slow moments for the camera</h2>
+              <p>
+                We pause at the quietest corners so you can capture reflections, mangroves, and island
+                views without rushing.
+              </p>
+              <ul class="checklist">
+                <li>Golden-hour reflections</li>
+                <li>Hidden mangrove paths</li>
+                <li>Optional island stop for views</li>
+              </ul>
+            </article>
+
+            <article class="journey-card" data-card="4" aria-hidden="true">
+              <p class="eyebrow">WhatsApp booking</p>
+              <h2>Simple confirmation, fast replies</h2>
+              <p>Message us with your date and group size, and we confirm your slot.</p>
+              <div class="cta-group">
+                <a
+                  class="btn btn-primary"
+                  href="https://wa.me/94761755558?text=Hi%20-%20I%27d%20like%20to%20book%20a%20tour.%20What%20options%20do%20you%20have%3F"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  Chat on WhatsApp
+                </a>
+                <button class="btn btn-secondary" type="button" data-modal-open>
+                  Booking details
+                </button>
+              </div>
+              <p class="microcopy">We reply within a few hours.</p>
+            </article>
+          </div>
+        </div>
+
+        <div class="journey-steps" aria-hidden="true">
+          <div class="journey-step" data-step="0"></div>
+          <div class="journey-step" data-step="1"></div>
+          <div class="journey-step" data-step="2"></div>
+          <div class="journey-step" data-step="3"></div>
+          <div class="journey-step" data-step="4" data-slow="true"></div>
         </div>
       </section>
 
@@ -585,6 +613,8 @@
         </div>
         <div class="footer-links">
           <a href="#story">Home</a>
+          <a href="#gallery">Gallery</a>
+          <a href="#journey">Journey</a>
           <a href="#tours">Tours</a>
           <a href="#practical">Practical info</a>
           <a href="#whatsapp">WhatsApp</a>
@@ -598,6 +628,32 @@
       </div>
       <p class="footer-legal">Copyright 2024 Koggala Lake Boat Safari. All rights reserved.</p>
     </footer>
+
+    <div class="modal" data-modal aria-hidden="true">
+      <div class="modal-backdrop" data-modal-close></div>
+      <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <button class="modal-close" type="button" data-modal-close aria-label="Close">
+          ×
+        </button>
+        <p class="eyebrow">Booking help</p>
+        <h2 id="modal-title">Book on WhatsApp</h2>
+        <p>
+          Share your preferred date, number of guests, and tour type. We will confirm availability
+          and reply quickly.
+        </p>
+        <div class="modal-actions">
+          <a
+            class="btn btn-primary"
+            href="https://wa.me/94761755558?text=Hi%20-%20I%20want%20to%20book%20a%20Koggala%20Lake%20Boat%20Safari."
+            target="_blank"
+            rel="noopener"
+          >
+            Open WhatsApp
+          </a>
+          <button class="btn btn-secondary" type="button" data-modal-close>Close</button>
+        </div>
+      </div>
+    </div>
 
     <a
       class="wa-float"
