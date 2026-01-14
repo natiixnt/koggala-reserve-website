@@ -6,6 +6,8 @@
 - Adjust `maxShift` to increase/decrease layer depth for each story block.
 - Adjust `lerp` and boat `lerp` values to make motion snappier or smoother.
 - Use `TUNING.motionScale` to reduce motion on mobile or for reduced-motion users.
+- Gallery scale/parallax is tuned in `createGalleryBlock` (scale and translate values).
+- Scroll-reveal animations use the `.reveal` class (see `styles.css` + `script.js`).
 
 ## Add or remove steps
 

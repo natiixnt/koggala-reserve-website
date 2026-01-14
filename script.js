@@ -169,6 +169,7 @@ const createStoryBlock = () => {
   const cards = Array.from(root.querySelectorAll('.story-card'));
   const layers = stage ? Array.from(stage.querySelectorAll('[data-depth]')) : [];
   const boat = stage ? stage.querySelector('.story-boat') : null;
+  const heroVisual = root.querySelector('[data-hero-visual]');
   const slowStep = steps.find((step) => step.dataset.slow === 'true');
 
   const state = {
@@ -194,6 +195,13 @@ const createStoryBlock = () => {
       const offset = block.smoothProgress * shift * depth;
       layer.style.transform = `translate3d(-50%, ${offset}px, 0)`;
     });
+
+    if (heroVisual) {
+      const visualProgress = block.smoothProgress;
+      const visualScale = reduceMotion ? 1 : 1.05 + 0.07 * visualProgress;
+      const visualY = reduceMotion ? 0 : -30 * visualProgress * motionScale;
+      heroVisual.style.transform = `translate3d(0, ${visualY}px, 0) scale(${visualScale})`;
+    }
 
     if (!boat) {
       return;
@@ -248,8 +256,24 @@ const createGalleryBlock = () => {
     });
   };
 
-  const update = () => {
-    // Gallery animation is handled with CSS transitions on active frames.
+  const update = (time, motionScale, block) => {
+    const lerpFactor = reduceMotion ? 0.2 : 0.12;
+    block.smoothProgress = lerp(block.smoothProgress, block.targetProgress, lerpFactor);
+    const stepCount = Math.max(steps.length - 1, 1);
+    const stepSize = 1 / stepCount;
+    const active = clamp(block.activeIndex, 0, frames.length - 1);
+    const stepStart = stepSize * active;
+    const stepProgress = clamp((block.smoothProgress - stepStart) / stepSize, 0, 1);
+
+    frames.forEach((frame, index) => {
+      if (index !== active) {
+        frame.style.transform = '';
+        return;
+      }
+      const scale = reduceMotion ? 1 : 1.05 + 0.07 * stepProgress;
+      const translateY = reduceMotion ? 0 : -30 * stepProgress * motionScale;
+      frame.style.transform = `translate3d(0, ${translateY}px, 0) scale(${scale})`;
+    });
   };
 
   return createBlock({ root, stage, steps, onActive, update });
@@ -410,55 +434,24 @@ if (document.readyState === 'loading') {
   init();
 }
 
-const carousel = document.querySelector('[data-carousel]');
-if (carousel) {
-  const track = carousel.querySelector('[data-track]');
-  const cards = track ? Array.from(track.children) : [];
-  const prevBtn = carousel.querySelector('[data-prev]');
-  const nextBtn = carousel.querySelector('[data-next]');
-  let index = 0;
-  let cardsPerView = 1;
-  let cardWidth = 0;
-
-  const updateCarousel = () => {
-    const maxIndex = Math.max(0, cards.length - cardsPerView);
-    index = clamp(index, 0, maxIndex);
-    if (track) {
-      track.style.transform = `translate3d(${-index * cardWidth}px, 0, 0)`;
-    }
-    if (prevBtn) {
-      prevBtn.disabled = index === 0;
-    }
-    if (nextBtn) {
-      nextBtn.disabled = index === maxIndex;
-    }
-  };
-
-  const layoutCarousel = () => {
-    cardsPerView = window.innerWidth >= 980 ? 2 : 1;
-    cardWidth = carousel.clientWidth / cardsPerView;
-    cards.forEach((card) => {
-      card.style.minWidth = `${cardWidth}px`;
-    });
-    updateCarousel();
-  };
-
-  if (prevBtn) {
-    prevBtn.addEventListener('click', () => {
-      index -= 1;
-      updateCarousel();
-    });
+const revealItems = Array.from(document.querySelectorAll('.reveal'));
+if (revealItems.length) {
+  if ('IntersectionObserver' in window) {
+    const revealObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-inview');
+            revealObserver.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.2, rootMargin: '0px 0px -10% 0px' }
+    );
+    revealItems.forEach((item) => revealObserver.observe(item));
+  } else {
+    revealItems.forEach((item) => item.classList.add('is-inview'));
   }
-
-  if (nextBtn) {
-    nextBtn.addEventListener('click', () => {
-      index += 1;
-      updateCarousel();
-    });
-  }
-
-  window.addEventListener('resize', layoutCarousel);
-  layoutCarousel();
 }
 
 const faqItems = Array.from(document.querySelectorAll('.faq-item'));
